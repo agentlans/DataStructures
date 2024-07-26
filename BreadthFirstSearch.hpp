@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <memory> // For std::unique_ptr
 
 #include "GraphAdjacencyList.hpp"
 
@@ -30,27 +31,28 @@
  *
  * Example:
  * @code
- * GraphAdjacencyList<int, float> graph;
- * graph.add_vertex(1);
- * graph.add_vertex(2);
- * graph.add_edge(1, 2, 1.0);
+ * auto graph = std::make_unique<GraphAdjacencyList<int, float>>();
+ * graph->add_vertex(1);
+ * graph->add_vertex(2);
+ * graph->add_edge(1, 2, 1.0);
  *
  * BreadthFirstSearch<int, float> bfs;
- * bfs.set_graph(graph);
+ * bfs.set_graph(graph.get());
  * auto reachable = bfs.bfs(1);
  * auto path = bfs.path(1, 2);
  * auto components = bfs.connected_components();
  * bool isBipartite = bfs.is_bipartite();
  * @endcode
  */
-template <class Vertex, class Weight> class BreadthFirstSearch {
+template <class Vertex, class Weight>
+class BreadthFirstSearch {
 public:
   /**
    * Sets the graph to be used for the BFS operations.
    *
    * @param graph The graph to be set for BFS.
    */
-  void set_graph(const GraphAdjacencyList<Vertex, Weight> &graph);
+  void set_graph(const GraphAdjacencyList<Vertex, Weight>& graph);
 
   /**
    * Performs a breadth-first search starting from the given vertex.
@@ -89,13 +91,12 @@ public:
   bool is_bipartite();
 
 private:
-  GraphAdjacencyList<Vertex, Weight> graph; // Changed to be a copy for safety
+  const GraphAdjacencyList<Vertex, Weight>* graph; // Changed to a pointer
 };
 
 template <class Vertex, class Weight>
-void BreadthFirstSearch<Vertex, Weight>::set_graph(
-    const GraphAdjacencyList<Vertex, Weight> &g) {
-  graph = g; // Store the graph for BFS operations
+void BreadthFirstSearch<Vertex, Weight>::set_graph(const GraphAdjacencyList<Vertex, Weight>& g) {
+  graph = &g; // Store the graph for BFS operations
 }
 
 template <class Vertex, class Weight>
@@ -105,7 +106,7 @@ BreadthFirstSearch<Vertex, Weight>::bfs(const Vertex &start) {
   std::queue<Vertex> queue;
 
   // Starting vertex isn't even in the graph
-  if (!graph.has_vertex(start))
+  if (!graph->has_vertex(start))
     return {};
 
   queue.push(start);
@@ -115,7 +116,7 @@ BreadthFirstSearch<Vertex, Weight>::bfs(const Vertex &start) {
     Vertex current = queue.front();
     queue.pop();
 
-    for (const auto &neighbour : graph.get_neighbours(current)) {
+    for (const auto &neighbour : graph->get_neighbours(current)) {
       if (visited.find(neighbour) == visited.end()) {
         visited.insert(neighbour);
         queue.push(neighbour);
@@ -128,8 +129,7 @@ BreadthFirstSearch<Vertex, Weight>::bfs(const Vertex &start) {
 
 template <class Vertex, class Weight>
 std::vector<Vertex>
-BreadthFirstSearch<Vertex, Weight>::path(const Vertex &start,
-                                         const Vertex &target) {
+BreadthFirstSearch<Vertex, Weight>::path(const Vertex &start, const Vertex &target) {
   std::unordered_map<Vertex, Vertex> parent;
   std::unordered_set<Vertex> visited;
   std::queue<Vertex> queue;
@@ -153,7 +153,7 @@ BreadthFirstSearch<Vertex, Weight>::path(const Vertex &start,
       return result;
     }
 
-    for (const auto &neighbour : graph.get_neighbours(current)) {
+    for (const auto &neighbour : graph->get_neighbours(current)) {
       if (visited.find(neighbour) == visited.end()) {
         visited.insert(neighbour);
         queue.push(neighbour);
@@ -169,11 +169,10 @@ template <class Vertex, class Weight>
 std::vector<std::vector<Vertex>>
 BreadthFirstSearch<Vertex, Weight>::connected_components() {
   std::unordered_set<Vertex> visited; // To keep track of visited vertices
-  std::vector<std::vector<Vertex>>
-      components; // To store the connected components
+  std::vector<std::vector<Vertex>> components; // To store the connected components
 
   // Get all vertices in the graph
-  std::vector<Vertex> vertices = graph.get_vertices();
+  std::vector<Vertex> vertices = graph->get_vertices();
 
   // Iterate through each vertex
   for (const Vertex &vertex : vertices) {
@@ -183,8 +182,7 @@ BreadthFirstSearch<Vertex, Weight>::connected_components() {
       std::unordered_set<Vertex> component = bfs(vertex);
 
       // Convert the component set to a vector and add it to components
-      components.push_back(
-          std::vector<Vertex>(component.begin(), component.end()));
+      components.push_back(std::vector<Vertex>(component.begin(), component.end()));
 
       // Mark all vertices in this component as visited
       visited.insert(component.begin(), component.end());
@@ -197,7 +195,7 @@ BreadthFirstSearch<Vertex, Weight>::connected_components() {
 template <class Vertex, class Weight>
 bool BreadthFirstSearch<Vertex, Weight>::is_bipartite() {
   std::unordered_map<Vertex, int> colour; // 0 or 1 for two colours
-  for (const auto &vertex : graph.get_vertices()) {
+  for (const auto &vertex : graph->get_vertices()) {
     if (colour.find(vertex) == colour.end()) {
       std::queue<Vertex> queue;
       queue.push(vertex);
@@ -207,7 +205,7 @@ bool BreadthFirstSearch<Vertex, Weight>::is_bipartite() {
         Vertex current = queue.front();
         queue.pop();
 
-        for (const auto &neighbour : graph.get_neighbours(current)) {
+        for (const auto &neighbour : graph->get_neighbours(current)) {
           if (colour.find(neighbour) == colour.end()) {
             colour[neighbour] = 1 - colour[current]; // Alternate colour
             queue.push(neighbour);

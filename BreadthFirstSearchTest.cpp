@@ -28,7 +28,7 @@ protected:
 };
 
 TEST_F(GraphTest, BFS_ReachableVertices) {
-  bfs.set_graph(directed_graph);
+  bfs.set_graph(directed_graph); // Pass pointer to the directed graph
   auto reachable = bfs.bfs('A');
   EXPECT_TRUE(reachable.count('A') > 0);
   EXPECT_TRUE(reachable.count('B') > 0);
@@ -37,7 +37,7 @@ TEST_F(GraphTest, BFS_ReachableVertices) {
 }
 
 TEST_F(GraphTest, BFS_NoPath) {
-  bfs.set_graph(directed_graph);
+  bfs.set_graph(directed_graph); // Pass pointer to the directed graph
   auto reachable = bfs.bfs('C');
   EXPECT_TRUE(reachable.count('C') > 0);
   EXPECT_TRUE(reachable.count('A') == 0);
@@ -45,7 +45,7 @@ TEST_F(GraphTest, BFS_NoPath) {
 }
 
 TEST_F(GraphTest, Path_Exists) {
-  bfs.set_graph(directed_graph);
+  bfs.set_graph(directed_graph); // Pass pointer to the directed graph
   auto path = bfs.path('A', 'C');
   EXPECT_EQ(path.size(), 2); // A -> C
   EXPECT_EQ(path[0], 'A');
@@ -53,13 +53,13 @@ TEST_F(GraphTest, Path_Exists) {
 }
 
 TEST_F(GraphTest, Path_NoPath) {
-  bfs.set_graph(directed_graph);
+  bfs.set_graph(directed_graph); // Pass pointer to the directed graph
   auto path = bfs.path('C', 'A');
   EXPECT_TRUE(path.empty()); // No path from C to A in directed graph
 }
 
 TEST_F(GraphTest, ConnectedComponents) {
-  bfs.set_graph(undirected_graph);
+  bfs.set_graph(undirected_graph); // Pass pointer to the undirected graph
   auto components = bfs.connected_components();
   EXPECT_EQ(components.size(), 1);    // All vertices are connected
   EXPECT_EQ(components[0].size(), 3); // A, B, C are in the same component
@@ -76,7 +76,7 @@ TEST_F(GraphTest, IsBipartite_True) {
   bipartite_graph.add_biedge('B', 'D', 1);
   bipartite_graph.add_biedge('C', 'D', 1);
 
-  bfs.set_graph(bipartite_graph);
+  bfs.set_graph(bipartite_graph); // Pass pointer to the bipartite graph
   EXPECT_TRUE(bfs.is_bipartite()); // Should return true
 }
 
@@ -89,20 +89,20 @@ TEST_F(GraphTest, IsBipartite_False) {
   non_bipartite_graph.add_biedge('B', 'C', 1);
   non_bipartite_graph.add_biedge('C', 'A', 1); // Creates a cycle of odd length
 
-  bfs.set_graph(non_bipartite_graph);
+  bfs.set_graph(non_bipartite_graph); // Pass pointer to the non-bipartite graph
   EXPECT_FALSE(bfs.is_bipartite()); // Should return false
 }
 
 TEST_F(GraphTest, BFS_EmptyGraph) {
   GraphAdjacencyList<char, int> empty_graph;
-  bfs.set_graph(empty_graph);
+  bfs.set_graph(empty_graph); // Pass pointer to the empty graph
   auto reachable = bfs.bfs('A'); // No vertices to reach
   EXPECT_TRUE(reachable.empty());
 }
 
 TEST_F(GraphTest, Path_EmptyGraph) {
   GraphAdjacencyList<char, int> empty_graph;
-  bfs.set_graph(empty_graph);
+  bfs.set_graph(empty_graph); // Pass pointer to the empty graph
   auto path = bfs.path('A', 'B'); // No path in an empty graph
   EXPECT_TRUE(path.empty());
 }

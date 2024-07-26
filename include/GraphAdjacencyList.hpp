@@ -119,6 +119,12 @@ public:
    */
   std::vector<Vertex> get_vertices() const;
 
+/**
+ * @brief Returns a vector of all edges in the graph.
+ * @return A vector of edges, where each edge is represented as a pair of vertices and a weight.
+ */
+std::vector<std::pair<Vertex, std::pair<Vertex, Weight>>> get_edges() const;
+
   /**
    * @brief Print the graph structure.
    */
@@ -294,6 +300,23 @@ template <typename Vertex, typename Weight>
 bool GraphAdjacencyList<Vertex, Weight>::has_vertex(
     const Vertex &vertex) const {
   return adjacency_list.find(vertex) != adjacency_list.end();
+}
+
+template <typename Vertex, typename Weight>
+std::vector<std::pair<Vertex, std::pair<Vertex, Weight>>>
+GraphAdjacencyList<Vertex, Weight>::get_edges() const {
+  std::vector<std::pair<Vertex, std::pair<Vertex, Weight>>> edges;
+
+  for (const auto& vertex_entry : adjacency_list) {
+    Vertex from = vertex_entry.first;
+    for (const auto& edge : vertex_entry.second) {
+      Vertex to = edge.first;
+      Weight weight = edge.second;
+      edges.push_back({from, {to, weight}});
+    }
+  }
+
+  return edges;
 }
 
 #endif // GRAPH_H

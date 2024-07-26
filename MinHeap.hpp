@@ -147,7 +147,7 @@ ValueType MinHeap<KeyType, ValueType>::get(const KeyType &key) const {
     int index = handles.get_by_key(key);
     return heap[index];
   } catch (const std::runtime_error &e) {
-    throw std::runtime_error("Key not found.");
+    throw std::out_of_range("Key not found.");
     return ValueType();
   }
 }

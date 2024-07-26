@@ -62,7 +62,7 @@ public:
    * @return The value of the extracted minimum key-value pair.
    * @throw std::underflow_error if the heap is empty.
    */
-  ValueType extract_min();
+  std::pair<KeyType, ValueType> extract_min();
 
   /**
    * @brief Checks if the heap is empty.
@@ -210,7 +210,7 @@ void MinHeap<KeyType, ValueType>::insert(const KeyType &key, ValueType value) {
 }
 
 template <class KeyType, class ValueType>
-ValueType MinHeap<KeyType, ValueType>::extract_min() {
+std::pair<KeyType, ValueType> MinHeap<KeyType, ValueType>::extract_min() {
   if (heap.empty()) {
     throw std::underflow_error("Heap is empty");
   }
@@ -227,7 +227,7 @@ ValueType MinHeap<KeyType, ValueType>::extract_min() {
     heapify_down(0);
   }
 
-  return min_value;
+  return {min_handle, min_value};
 }
 
 template <class KeyType, class ValueType>

@@ -1,12 +1,12 @@
 #ifndef _BFS_H
 #define _BFS_H
 
+#include <memory> // For std::unique_ptr
 #include <queue>
 #include <stdexcept>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <memory> // For std::unique_ptr
 
 #include "GraphAdjacencyList.hpp"
 
@@ -44,15 +44,14 @@
  * bool isBipartite = bfs.is_bipartite();
  * @endcode
  */
-template <class Vertex, class Weight>
-class BreadthFirstSearch {
+template <class Vertex, class Weight> class BreadthFirstSearch {
 public:
   /**
    * Sets the graph to be used for the BFS operations.
    *
    * @param graph The graph to be set for BFS.
    */
-  void set_graph(const GraphAdjacencyList<Vertex, Weight>& graph);
+  void set_graph(const GraphAdjacencyList<Vertex, Weight> &graph);
 
   /**
    * Performs a breadth-first search starting from the given vertex.
@@ -91,11 +90,12 @@ public:
   bool is_bipartite();
 
 private:
-  const GraphAdjacencyList<Vertex, Weight>* graph; // Changed to a pointer
+  const GraphAdjacencyList<Vertex, Weight> *graph; // Changed to a pointer
 };
 
 template <class Vertex, class Weight>
-void BreadthFirstSearch<Vertex, Weight>::set_graph(const GraphAdjacencyList<Vertex, Weight>& g) {
+void BreadthFirstSearch<Vertex, Weight>::set_graph(
+    const GraphAdjacencyList<Vertex, Weight> &g) {
   graph = &g; // Store the graph for BFS operations
 }
 
@@ -129,7 +129,8 @@ BreadthFirstSearch<Vertex, Weight>::bfs(const Vertex &start) {
 
 template <class Vertex, class Weight>
 std::vector<Vertex>
-BreadthFirstSearch<Vertex, Weight>::path(const Vertex &start, const Vertex &target) {
+BreadthFirstSearch<Vertex, Weight>::path(const Vertex &start,
+                                         const Vertex &target) {
   std::unordered_map<Vertex, Vertex> parent;
   std::unordered_set<Vertex> visited;
   std::queue<Vertex> queue;
@@ -169,7 +170,8 @@ template <class Vertex, class Weight>
 std::vector<std::vector<Vertex>>
 BreadthFirstSearch<Vertex, Weight>::connected_components() {
   std::unordered_set<Vertex> visited; // To keep track of visited vertices
-  std::vector<std::vector<Vertex>> components; // To store the connected components
+  std::vector<std::vector<Vertex>>
+      components; // To store the connected components
 
   // Get all vertices in the graph
   std::vector<Vertex> vertices = graph->get_vertices();
@@ -182,7 +184,8 @@ BreadthFirstSearch<Vertex, Weight>::connected_components() {
       std::unordered_set<Vertex> component = bfs(vertex);
 
       // Convert the component set to a vector and add it to components
-      components.push_back(std::vector<Vertex>(component.begin(), component.end()));
+      components.push_back(
+          std::vector<Vertex>(component.begin(), component.end()));
 
       // Mark all vertices in this component as visited
       visited.insert(component.begin(), component.end());

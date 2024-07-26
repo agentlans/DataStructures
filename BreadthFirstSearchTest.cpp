@@ -76,7 +76,7 @@ TEST_F(GraphTest, IsBipartite_True) {
   bipartite_graph.add_biedge('B', 'D', 1);
   bipartite_graph.add_biedge('C', 'D', 1);
 
-  bfs.set_graph(bipartite_graph); // Pass pointer to the bipartite graph
+  bfs.set_graph(bipartite_graph);  // Pass pointer to the bipartite graph
   EXPECT_TRUE(bfs.is_bipartite()); // Should return true
 }
 
@@ -90,19 +90,19 @@ TEST_F(GraphTest, IsBipartite_False) {
   non_bipartite_graph.add_biedge('C', 'A', 1); // Creates a cycle of odd length
 
   bfs.set_graph(non_bipartite_graph); // Pass pointer to the non-bipartite graph
-  EXPECT_FALSE(bfs.is_bipartite()); // Should return false
+  EXPECT_FALSE(bfs.is_bipartite());   // Should return false
 }
 
 TEST_F(GraphTest, BFS_EmptyGraph) {
   GraphAdjacencyList<char, int> empty_graph;
-  bfs.set_graph(empty_graph); // Pass pointer to the empty graph
+  bfs.set_graph(empty_graph);    // Pass pointer to the empty graph
   auto reachable = bfs.bfs('A'); // No vertices to reach
   EXPECT_TRUE(reachable.empty());
 }
 
 TEST_F(GraphTest, Path_EmptyGraph) {
   GraphAdjacencyList<char, int> empty_graph;
-  bfs.set_graph(empty_graph); // Pass pointer to the empty graph
+  bfs.set_graph(empty_graph);     // Pass pointer to the empty graph
   auto path = bfs.path('A', 'B'); // No path in an empty graph
   EXPECT_TRUE(path.empty());
 }

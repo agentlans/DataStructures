@@ -50,12 +50,15 @@ TEST_F(MinHeapTest, TestUpdateValue) {
 
 TEST_F(MinHeapTest, TestGetThrowsOnEmpty) {
   MinHeap<int, int> emptyHeap;
-  EXPECT_THROW(emptyHeap.get(1), std::out_of_range); // Should throw when key is not found
+  EXPECT_THROW(emptyHeap.get(1),
+               std::out_of_range); // Should throw when key is not found
 }
 
 TEST_F(MinHeapTest, TestExtractMinThrowsOnEmpty) {
   MinHeap<int, int> emptyHeap;
-  EXPECT_THROW(emptyHeap.extract_min(), std::underflow_error); // Should throw when extracting from empty heap
+  EXPECT_THROW(
+      emptyHeap.extract_min(),
+      std::underflow_error); // Should throw when extracting from empty heap
 }
 
 TEST_F(MinHeapTest, TestPrintHeap) {

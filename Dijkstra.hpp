@@ -3,10 +3,10 @@
 
 #include <limits>
 #include <stdexcept>
-#include <unordered_map>
 #include <utility>
 #include <vector>
 
+#include "UnorderedContainers.hpp"
 #include "GraphAdjacencyList.hpp"
 #include "MinHeap.hpp"
 
@@ -49,11 +49,11 @@ public:
 private:
   const GraphAdjacencyList<Vertex, Weight> *graph_ =
       nullptr; ///< Pointer to the graph.
-  std::unordered_map<Vertex, Weight>
+  UnorderedMap<Vertex, Weight>
       distances_; ///< Map of distances from the start vertex.
-  std::unordered_map<Vertex, Vertex>
+  UnorderedMap<Vertex, Vertex>
       predecessors_; ///< Map of predecessors for path reconstruction.
-  std::unordered_map<Vertex, bool> visited_; ///< Map to track visited vertices.
+  UnorderedMap<Vertex, bool> visited_; ///< Map to track visited vertices.
 };
 
 template <class Vertex, class Weight>

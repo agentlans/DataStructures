@@ -2,7 +2,7 @@
 #define UNIONFIND_H
 
 #include <stdexcept>
-#include <unordered_map>
+#include "UnorderedContainers.hpp"
 
 template <class T> class UnionFind {
 public:
@@ -53,8 +53,8 @@ public:
   int get_count() const;
 
 private:
-  std::unordered_map<T, T> parent; // Maps each element to its parent
-  std::unordered_map<T, int> rank; // Maps each element to its rank
+  UnorderedMap<T, T> parent; // Maps each element to its parent
+  UnorderedMap<T, int> rank; // Maps each element to its rank
   int count;                       // Number of disjoint sets
 };
 

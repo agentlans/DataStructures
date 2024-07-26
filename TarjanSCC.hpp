@@ -3,9 +3,9 @@
 
 #include <algorithm>
 #include <stack>
-#include <unordered_map>
 #include <vector>
 
+#include "UnorderedContainers.hpp"
 #include "GraphAdjacencyList.hpp"
 
 /**
@@ -38,8 +38,8 @@ tarjan_scc(const GraphAdjacencyList<Vertex, Weight> &g);
 template <typename Vertex, typename Weight>
 std::vector<std::vector<Vertex>>
 tarjan_scc(const GraphAdjacencyList<Vertex, Weight> &g) {
-  std::unordered_map<Vertex, int> index_map;
-  std::unordered_map<Vertex, int> low_link_map;
+  UnorderedMap<Vertex, int> index_map;
+  UnorderedMap<Vertex, int> low_link_map;
   std::stack<Vertex> stack;
   std::vector<std::vector<Vertex>> strongly_connected_components;
   std::vector<Vertex> on_stack;

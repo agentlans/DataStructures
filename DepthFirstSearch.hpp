@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <stack>
 #include <stdexcept>
-#include <unordered_set>
 #include <vector>
 
+#include "UnorderedContainers.hpp"
 #include "GraphAdjacencyList.hpp"
 
 /**
@@ -39,7 +39,7 @@ public:
    * @param start The starting vertex for the search.
    * @return A set of vertices visited during the search.
    */
-  std::unordered_set<Vertex> dfs(const Vertex &start);
+  UnorderedSet<Vertex> dfs(const Vertex &start);
 
   /**
    * @brief Finds a path from the start vertex to the target vertex.
@@ -83,9 +83,9 @@ void DepthFirstSearch<Vertex, Weight>::set_graph(
 }
 
 template <class Vertex, class Weight>
-std::unordered_set<Vertex>
+UnorderedSet<Vertex>
 DepthFirstSearch<Vertex, Weight>::dfs(const Vertex &start) {
-  std::unordered_set<Vertex> visited;
+  UnorderedSet<Vertex> visited;
   std::stack<Vertex> stack;
 
   // Starting vertex isn't even in the graph
@@ -112,7 +112,7 @@ template <class Vertex, class Weight>
 std::vector<Vertex>
 DepthFirstSearch<Vertex, Weight>::path(const Vertex &start,
                                        const Vertex &target) {
-  std::unordered_set<Vertex> visited;
+  UnorderedSet<Vertex> visited;
   std::vector<Vertex> result;
   std::stack<std::pair<Vertex, std::vector<Vertex>>> stack;
   stack.push({start, {start}});
@@ -139,8 +139,8 @@ DepthFirstSearch<Vertex, Weight>::path(const Vertex &start,
 
 template <class Vertex, class Weight>
 std::vector<Vertex> DepthFirstSearch<Vertex, Weight>::find_cycle() {
-  std::unordered_set<Vertex> visited;
-  std::unordered_set<Vertex> rec_stack;
+  UnorderedSet<Vertex> visited;
+  UnorderedSet<Vertex> rec_stack;
   std::vector<Vertex> cycle;
 
   std::function<bool(Vertex)> dfs_visit = [&](Vertex vertex) {
@@ -178,8 +178,8 @@ std::vector<Vertex> DepthFirstSearch<Vertex, Weight>::find_cycle() {
 
 template <class Vertex, class Weight>
 std::vector<Vertex> DepthFirstSearch<Vertex, Weight>::topological_sort() {
-  std::unordered_set<Vertex> visited;
-  std::unordered_set<Vertex> rec_stack; // To track vertices in the current path
+  UnorderedSet<Vertex> visited;
+  UnorderedSet<Vertex> rec_stack; // To track vertices in the current path
   std::stack<Vertex> stack;
   std::vector<Vertex> result;
 
@@ -224,7 +224,7 @@ std::vector<Vertex> DepthFirstSearch<Vertex, Weight>::topological_sort() {
 
 template <class Vertex, class Weight>
 bool DepthFirstSearch<Vertex, Weight>::is_bipartite() {
-  std::unordered_map<Vertex, int> colour;
+  UnorderedMap<Vertex, int> colour;
   for (const auto &vertex : graph->get_vertices()) {
     if (colour.find(vertex) == colour.end()) {
       std::stack<Vertex> stack;

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <stdexcept>
-#include <unordered_map>
+#include "UnorderedContainers.hpp"
 
 template <class KeyType, class ValueType> class BijectiveMap {
 public:
@@ -34,8 +34,8 @@ public:
   void display() const;
 
 private:
-  std::unordered_map<KeyType, ValueType> forward_map; // Maps keys to values
-  std::unordered_map<ValueType, KeyType> reverse_map; // Maps values to keys
+  UnorderedMap<KeyType, ValueType> forward_map; // Maps keys to values
+  UnorderedMap<ValueType, KeyType> reverse_map; // Maps values to keys
 };
 
 // Create or Update an entry in the bijective map

@@ -4,10 +4,9 @@
 #include <memory> // For std::unique_ptr
 #include <queue>
 #include <stdexcept>
-#include <unordered_map>
-#include <unordered_set>
 #include <vector>
 
+#include "UnorderedContainers.hpp"
 #include "GraphAdjacencyList.hpp"
 
 /**
@@ -59,7 +58,7 @@ public:
    * @param start The starting vertex for the BFS.
    * @return A set of vertices reachable from the starting vertex.
    */
-  std::unordered_set<Vertex> bfs(const Vertex &start);
+  UnorderedSet<Vertex> bfs(const Vertex &start);
 
   /**
    * Finds the path from the start vertex to the target vertex using BFS.
@@ -100,9 +99,9 @@ void BreadthFirstSearch<Vertex, Weight>::set_graph(
 }
 
 template <class Vertex, class Weight>
-std::unordered_set<Vertex>
+UnorderedSet<Vertex>
 BreadthFirstSearch<Vertex, Weight>::bfs(const Vertex &start) {
-  std::unordered_set<Vertex> visited;
+  UnorderedSet<Vertex> visited;
   std::queue<Vertex> queue;
 
   // Starting vertex isn't even in the graph
@@ -131,8 +130,8 @@ template <class Vertex, class Weight>
 std::vector<Vertex>
 BreadthFirstSearch<Vertex, Weight>::path(const Vertex &start,
                                          const Vertex &target) {
-  std::unordered_map<Vertex, Vertex> parent;
-  std::unordered_set<Vertex> visited;
+  UnorderedMap<Vertex, Vertex> parent;
+  UnorderedSet<Vertex> visited;
   std::queue<Vertex> queue;
 
   queue.push(start);
@@ -169,7 +168,7 @@ BreadthFirstSearch<Vertex, Weight>::path(const Vertex &start,
 template <class Vertex, class Weight>
 std::vector<std::vector<Vertex>>
 BreadthFirstSearch<Vertex, Weight>::connected_components() {
-  std::unordered_set<Vertex> visited; // To keep track of visited vertices
+  UnorderedSet<Vertex> visited; // To keep track of visited vertices
   std::vector<std::vector<Vertex>>
       components; // To store the connected components
 
@@ -181,7 +180,7 @@ BreadthFirstSearch<Vertex, Weight>::connected_components() {
     // If the vertex has not been visited, perform BFS
     if (visited.find(vertex) == visited.end()) {
       // Perform BFS to find all reachable vertices from this vertex
-      std::unordered_set<Vertex> component = bfs(vertex);
+      UnorderedSet<Vertex> component = bfs(vertex);
 
       // Convert the component set to a vector and add it to components
       components.push_back(
@@ -197,7 +196,7 @@ BreadthFirstSearch<Vertex, Weight>::connected_components() {
 
 template <class Vertex, class Weight>
 bool BreadthFirstSearch<Vertex, Weight>::is_bipartite() {
-  std::unordered_map<Vertex, int> colour; // 0 or 1 for two colours
+  UnorderedMap<Vertex, int> colour; // 0 or 1 for two colours
   for (const auto &vertex : graph->get_vertices()) {
     if (colour.find(vertex) == colour.end()) {
       std::queue<Vertex> queue;
